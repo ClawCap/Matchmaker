@@ -166,24 +166,17 @@ depends: manobrowser
 
 ### 数据持久化（⚠️ 必须执行）
 
-**每个平台采集完毕后，立即将全量原始数据写入本地文件。每完成一个就保存一个。**
+**所有 ClawCap Skill 共享 `clawcap-data/` 目录**，按人组织：
+- 用户自己 → `clawcap-data/self/`
+- 对方 → `clawcap-data/{对方昵称}/`
 
-```
-matchmaker-data/
-├── person_A/
-│   ├── douyin.json
-│   ├── xiaohongshu.json
-│   ├── weibo.json
-│   ├── douban.json
-│   ├── bilibili.json
-│   └── metadata.json
-├── person_B/
-│   ├── (同上)
-│   └── metadata.json
-└── {日期}_match_report.md
-```
+**采集前先检查是否已有数据可复用**：
+- `clawcap-data/{person}/{platform}.json` 存在 + < 7天 → **直接复用**
+- 不存在 → 正常采集
 
-**执行方式**：子 Skill 的 JS 脚本将数据 `return JSON.stringify(...)` 返回到上下文后，**你必须立即将完整 JSON 写入对应文件**。保存完整数据（全部标题/评分/关注列表），不是摘要。
+**每个平台采集完毕后，立即将全量原始数据写入对应文件**。保存完整数据，不是摘要。报告输出到 `clawcap-data/reports/match_{A}_{B}_{日期}.md`。
+
+> 💡 如果用户之前用过 Know Your Owner / 照妖镜 / REAL，自己的数据已在 `clawcap-data/self/` 里了，直接复用。
 
 ### 平台对齐原则
 
