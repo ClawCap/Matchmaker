@@ -160,9 +160,30 @@ depends: manobrowser
 
 ### 采集流程
 
-1. **先采集第一个人**：按正常流程逐平台采集，保存为 `matchmaker-data/person_A.json`
-2. **再采集第二个人**：同样流程，保存为 `matchmaker-data/person_B.json`
+1. **先采集第一个人**：按正常流程逐平台采集
+2. **再采集第二个人**：同样流程
 3. **确认两人数据都完整**后进入分析阶段
+
+### 数据持久化（⚠️ 必须执行）
+
+**每个平台采集完毕后，立即将全量原始数据写入本地文件。每完成一个就保存一个。**
+
+```
+matchmaker-data/
+├── person_A/
+│   ├── douyin.json
+│   ├── xiaohongshu.json
+│   ├── weibo.json
+│   ├── douban.json
+│   ├── bilibili.json
+│   └── metadata.json
+├── person_B/
+│   ├── (同上)
+│   └── metadata.json
+└── {日期}_match_report.md
+```
+
+**执行方式**：子 Skill 的 JS 脚本将数据 `return JSON.stringify(...)` 返回到上下文后，**你必须立即将完整 JSON 写入对应文件**。保存完整数据（全部标题/评分/关注列表），不是摘要。
 
 ### 平台对齐原则
 
